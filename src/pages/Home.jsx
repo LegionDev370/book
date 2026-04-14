@@ -1,4 +1,10 @@
+import Slider from "../components/Slider";
+
 const HomePage = () => {
-  return <div>Home Page</div>;
+  return (
+    <section>
+      <Slider />
+    </section>
+  );
 };
 export default HomePage;
