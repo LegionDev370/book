@@ -5,6 +5,8 @@ import Nasr from "../pages/Nasr";
 import Nazm from "../pages/Nazm";
 import Artical from "../pages/Article";
 import Forum from "../pages/Forum";
+import SignUp from "../pages/SignUp";
+import SignIn from "../pages/SignIn";
 
 const routers = createBrowserRouter([
   {
@@ -34,11 +36,11 @@ const routers = createBrowserRouter([
   },
   {
     path: "/sign-up",
-    element: <h1>SignUp</h1>,
+    element: <SignUp />,
   },
   {
     path: "/sign-in",
-    element: <h1>SignIn</h1>,
+    element: <SignIn />,
   },
   {
     path: "*",
