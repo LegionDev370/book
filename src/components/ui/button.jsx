@@ -1,9 +1,10 @@
 import React from "react";
 
-const Button = ({ children, className }) => {
+const Button = ({ children, type, className }) => {
   return (
     <button
-      className={`bg-[#152540] cursor-pointer hover:opacity-70 py-2.5 rounded-[99px] font-medium text-[18px] text-white ${className}`}
+      type={type}
+      className={`bg-[#152540] h-11.5 cursor-pointer hover:opacity-70 py-2.5 rounded-[99px] font-medium text-[18px] text-white ${className}`}
     >
       {children}
     </button>

@@ -1,12 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import AuthIcon from "../assets/auth.svg";
 import { Link } from "react-router-dom";
 import Input from "../components/ui/input";
 import Button from "../components/ui/button";
+import { useForm } from "react-hook-form";
+import { useRegister } from "../hooks/api/useRegister";
+import Loader from "../components/ui/Loader";
 const SignUp = () => {
+  const form = useForm();
+  const { sendRequest, loading, onSuccess } = useRegister();
   useEffect(() => {
     document.body.style.background = "none";
   }, []);
+  const onSubmit = (values) => {
+    sendRequest(values);
+  };
+  useEffect(() => {
+    if (onSuccess) {
+      form.reset();
+    }
+  }, [onSuccess]);
   return (
     <div className="flex h-screen">
       <div className="w-[50%] bg-[#C9AC8CED]">
@@ -23,13 +36,21 @@ const SignUp = () => {
               Sign in
             </Link>
           </span>
-          <form action="" className="flex flex-col gap-y-4 mt-6">
-            <Input placeholder={"First name"} />
-            <Input placeholder={"Last name"} />
-            <Input placeholder={"Phone"} />
-            <Input placeholder={"Email"} />
-            <Input placeholder={"Password"} />
-            <Button>Submit</Button>
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="flex flex-col gap-y-4 mt-6"
+          >
+            <Input name={"firstname"} form={form} placeholder={"First name"} />
+            <Input name={"lastname"} form={form} placeholder={"Last name"} />
+            <Input name={"phone_number"} form={form} placeholder={"Phone"} />
+            <Input name={"email"} form={form} placeholder={"Email"} />
+            <Input name={"password"} form={form} placeholder={"Password"} />
+            <Button
+              className={"flex justify-center items-center"}
+              type={"submit"}
+            >
+              {loading ? <Loader /> : "Submit"}
+            </Button>
           </form>
         </div>
       </div>
