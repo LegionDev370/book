@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import AuthIcon from "../assets/auth.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useNavigation } from "react-router-dom";
 import Input from "../components/ui/input";
 import Button from "../components/ui/button";
 import { useForm } from "react-hook-form";
@@ -9,19 +9,28 @@ import Loader from "../components/ui/Loader";
 import { toast } from "react-toastify";
 const SignUp = () => {
   const form = useForm();
-  const { sendRequest, loading, onSuccess } = useRegister();
+  const navigate = useNavigate();
+  const { data, isLoading, isSuccess, mutateAsync, error } = useRegister();
   useEffect(() => {
     document.body.style.background = "none";
   }, []);
   const onSubmit = (values) => {
-    sendRequest(values);
+    mutateAsync(values);
   };
   useEffect(() => {
-    if (onSuccess) {
+    if (isSuccess) {
       form.reset();
       toast.success("success");
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     }
-  }, [onSuccess]);
+  }, [isSuccess]);
+  useEffect(() => {
+    if (error) {
+      toast.error(error?.response?.data?.message);
+    }
+  }, [error]);
   return (
     <div className="flex h-screen">
       <div className="w-[50%] bg-[#C9AC8CED]">
@@ -51,7 +60,7 @@ const SignUp = () => {
               className={"flex justify-center items-center"}
               type={"submit"}
             >
-              {loading ? <Loader /> : "Submit"}
+              {isLoading ? <Loader /> : "Submit"}
             </Button>
           </form>
         </div>
