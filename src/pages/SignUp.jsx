@@ -6,6 +6,7 @@ import Button from "../components/ui/button";
 import { useForm } from "react-hook-form";
 import { useRegister } from "../hooks/api/useRegister";
 import Loader from "../components/ui/Loader";
+import { toast } from "react-toastify";
 const SignUp = () => {
   const form = useForm();
   const { sendRequest, loading, onSuccess } = useRegister();
@@ -18,6 +19,7 @@ const SignUp = () => {
   useEffect(() => {
     if (onSuccess) {
       form.reset();
+      toast.success("success");
     }
   }, [onSuccess]);
   return (

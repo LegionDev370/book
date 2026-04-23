@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 export const useRegister = () => {
   const [state, setState] = useState({
@@ -9,19 +10,12 @@ export const useRegister = () => {
   });
   const onRegister = async (payload) => {
     setState({ data: null, loading: true, onSuccess: null });
-    const { data, status } = await axios.post(
-      "http://localhost:3000/api/auth/register",
-      payload,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      },
-    );
-    if (status === 200 || status === 201) {
-      return setState({ data, loading: false, onSuccess: true });
+    try {
+     
+    } catch (error) {
+      console.log(error);
+    
     }
-    setState({ data, loading: false, onSuccess: false });
   };
   return {
     sendRequest: onRegister,
