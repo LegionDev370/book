@@ -7,6 +7,7 @@ import Artical from "../pages/Article";
 import Forum from "../pages/Forum";
 import SignUp from "../pages/SignUp";
 import SignIn from "../pages/SignIn";
+import Profile from "../pages/Profile";
 
 const routers = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ const routers = createBrowserRouter([
         path: "/forum",
         element: <Forum />,
       },
+      {
+        path: "/profile",
+        element: <Profile />,
+      },
     ],
   },
   {
@@ -42,6 +47,7 @@ const routers = createBrowserRouter([
     path: "/sign-in",
     element: <SignIn />,
   },
+
   {
     path: "*",
     element: <h2>Not found</h2>,

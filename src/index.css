@@ -5,3 +5,13 @@
   margin: 0 auto;
   padding: 0 15px;
 }
+
+@theme {
+  --color-dark-900: #191919;
+  --color-dark-800: #222222;
+  --color-dark-700: #2a2a2a;
+  --color-dark-600: #333333;
+  --color-dark-500: #444444;
+  --color-blue-primary: #1e4fa8;
+  --color-blue-hover: #2a6fdb;
+}
