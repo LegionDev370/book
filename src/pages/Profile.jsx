@@ -1,20 +1,55 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useUserStore } from "../store/user.store";
+import { useUpdateProfile } from "../hooks/api/useUpdateProfile";
 
 export default function Profile() {
   const { user } = useUserStore();
+  const { data, error, isPending, isSuccess, mutateAsync } = useUpdateProfile();
+  const [imgUrl, setImgUrl] = useState(null);
   const form = useForm({
     defaultValues: {
       firstname: user?.firstname,
       lastname: user?.lastname,
-      phone: user?.phone_number,
+      phone_number: user?.phone_number,
       email: user?.email,
     },
   });
   useEffect(() => {
     const file = form.getValues("file");
+    if (file[0]) {
+      const reader = new FileReader();
+      reader.onloadend = function () {
+        setImgUrl(reader.result);
+      };
+      reader.readAsDataURL(file[0]);
+    }
   }, [form.watch("file")]);
+  const onSubmit = (data) => {
+    const formData = new FormData();
+    formData.append("firstname", data.firstname);
+    formData.append("lastname", data.lastname);
+    formData.append("phone_number", data.phone_number);
+    formData.append("email", data.email);
+    formData.append("avatar", data.file[0]);
+    mutateAsync(formData);
+  };
+
+  useEffect(() => {
+    if (user) {
+      form.setValue("firstname", user.firstname);
+      form.setValue("lastname", user.lastname);
+      form.setValue("phone_number", user.phone);
+      form.setValue("email", user.email);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user && user.avatar) {
+      setImgUrl(`http://localhost:3000${user.avatar}`);
+    }
+  }, [user]);
+
   return (
     <div className="min-h-screen font-sans" style={{ background: "#191919" }}>
       <div
@@ -70,16 +105,27 @@ export default function Profile() {
       </div>
 
       {/* Content */}
-      <div className="flex gap-12 px-12 py-10 items-start">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex gap-12 px-12 py-10 items-start"
+      >
         {/* Avatar */}
         <div className="flex flex-col items-center flex-shrink-0">
           <div
             className="w-32 h-32 rounded-full overflow-hidden border-2 flex items-center justify-center"
             style={{ background: "#1a2540", borderColor: "#2e2e2e" }}
           >
-            <span className="text-4xl font-bold" style={{ color: "#4a7fd4" }}>
-              JW
-            </span>
+            {imgUrl ? (
+              <img
+                className="w-full h-full object-cover"
+                src={imgUrl}
+                alt="profile-image"
+              />
+            ) : (
+              <span className="text-4xl font-bold" style={{ color: "#4a7fd4" }}>
+                {`${user?.firstname?.slice(0, 1)} ${user?.lastname?.slice(0, 1)}`}
+              </span>
+            )}
           </div>
           <label
             htmlFor="file"
@@ -177,7 +223,7 @@ export default function Profile() {
               <input
                 type="text"
                 defaultValue={user?.phone}
-                {...form.register("phone")}
+                {...form.register("phone_number")}
                 className="w-full px-4 py-3 rounded-lg text-sm outline-none transition-colors"
                 style={{
                   background: "#242424",
@@ -220,6 +266,7 @@ export default function Profile() {
           {/* Save Button */}
           <div className="flex justify-end mt-3">
             <button
+              type="submit"
               className="px-8 py-3 rounded-lg text-sm font-semibold text-white cursor-pointer transition-colors"
               style={{ background: "#1e4fa8", border: "none" }}
               onMouseOver={(e) => (e.target.style.background = "#2a6fdb")}
@@ -229,7 +276,7 @@ export default function Profile() {
             </button>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }

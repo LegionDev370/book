@@ -83,8 +83,6 @@ export default function ProfileDropdown({}) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  console.log(user);
-
   return (
     <div ref={wrapperRef} className="relative">
       {/* Trigger */}
