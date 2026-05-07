@@ -1,6 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import ProfileIcon from "../../assets/profile-icon.svg";
 import { useUserStore } from "../../store/user.store";
+import {
+  getTokenFromLocalStorage,
+  removeTokenLocalStorage,
+} from "../../utils/localstorage";
+import { useNavigate } from "react-router-dom";
 const menuItems = [
   {
     label: "Profil",
@@ -69,9 +74,19 @@ const SvgIcon = ({ children }) => (
 
 export default function ProfileDropdown({}) {
   const data = useUserStore();
+  const navigate = useNavigate();
   const user = { ...data.user, avatar: ProfileIcon };
   const [isOpen, setIsOpen] = useState(false);
   const wrapperRef = useRef(null);
+
+  const onLogout = () => {
+    const token = getTokenFromLocalStorage();
+    if (token) {
+      removeTokenLocalStorage();
+      data.setUser(null);
+      window.location.reload();
+    }
+  };
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -85,7 +100,6 @@ export default function ProfileDropdown({}) {
 
   return (
     <div ref={wrapperRef} className="relative">
-      {/* Trigger */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         className="flex items-center gap-3 cursor-pointer focus:outline-none"
@@ -167,7 +181,7 @@ export default function ProfileDropdown({}) {
           <button
             onClick={() => {
               setIsOpen(false);
-              // logout logicni shu yerga yozing
+              onLogout();
             }}
             className="w-full flex items-center gap-3 px-4 py-2.5 text-red-400 hover:bg-zinc-700 hover:text-red-300 transition-colors text-sm"
           >
